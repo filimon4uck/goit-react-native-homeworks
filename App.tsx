@@ -1,8 +1,7 @@
 import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
 import React, { useEffect, useState } from "react";
-
-import RegistrationScreen from "./screens/RegistrationScreen";
+import LoginScreen from "./screens/LoginScreen";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -29,7 +28,7 @@ const App = () => {
     return null;
   }
 
-  return <RegistrationScreen />;
+  return <LoginScreen />;
 };
 
 export default App;

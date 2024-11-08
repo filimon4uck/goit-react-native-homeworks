@@ -10,7 +10,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import { colors } from "../styles/global";
+import { colors, textStyles } from "../styles/global";
 import React, { useState } from "react";
 import Input from "../components/Input";
 import ButtonPrimary from "../components/ButtonPrimary";
@@ -53,7 +53,7 @@ const RegistrationScreen: React.FC = () => {
           behavior={Platform.OS === "android" ? "padding" : "padding"}
           style={styles.formContainer}
         >
-          <ImageProfile />
+          <ImageProfile loadedImage={true} />
           <Text style={styles.title}>Реєстрація</Text>
           <View style={[, styles.innerContainer, styles.inputsContainer]}>
             <Input
@@ -85,7 +85,7 @@ const RegistrationScreen: React.FC = () => {
             </Input>
           </View>
           <View style={[styles.innerContainer, styles.buttonsContainer]}>
-            <ButtonPrimary onPress={onRegisterHandler}>
+            <ButtonPrimary isActive={true} onPress={onRegisterHandler}>
               <Text style={(styles.baseButtonText, styles.primaryButton)}>
                 Зареєстуватися
               </Text>
@@ -133,12 +133,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   title: {
+    ...textStyles.mediumText,
     textAlign: "center",
     color: colors.black,
-    fontFamily: "Roboto-Medium",
-    fontSize: 30,
-    lineHeight: 36,
-    letterSpacing: 1,
   },
   innerContainer: {
     gap: 16,
@@ -153,9 +150,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   baseButtonText: {
-    fontFamily: "Roboto-Medium",
-    fontSize: 16,
-    lineHeight: 19,
+    ...textStyles.regularText,
   },
   secondaryButton: {
     color: colors.blue,

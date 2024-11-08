@@ -1,12 +1,33 @@
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, ImageBackground } from "react-native";
+import React from "react";
 import { colors } from "../styles/global";
 import Plus from "../assets/icons/Union.svg";
+type imageProfileProps = {
+  loadedImage: boolean;
+};
 
-const ImageProfile = () => {
+const ImageProfile: React.FC<imageProfileProps> = ({ loadedImage }) => {
   return (
     <View style={styles.container}>
-      <View style={styles.addIcon}>
-        <Plus fill={colors.orange} width={13} height={13} />
+      <ImageBackground
+        style={styles.image}
+        source={require("../assets/images/user_image.png")}
+      ></ImageBackground>
+      <View
+        style={[
+          styles.addIcon,
+          {
+            borderColor: loadedImage ? colors.border_gray : colors.orange,
+            backgroundColor: colors.white,
+          },
+        ]}
+      >
+        <Plus
+          fill={loadedImage ? colors.border_gray : colors.orange}
+          width={13}
+          height={13}
+          rotation={loadedImage ? 45 : 0}
+        />
       </View>
     </View>
   );
@@ -23,6 +44,10 @@ const styles = StyleSheet.create({
     backgroundColor: colors.gray,
     borderRadius: 16,
   },
+  image: {
+    ...StyleSheet.absoluteFillObject,
+    resizeMode: "cover",
+  },
   addIcon: {
     position: "absolute",
     bottom: 14,
@@ -33,6 +58,5 @@ const styles = StyleSheet.create({
     height: 25,
     borderRadius: 100,
     borderWidth: 1,
-    borderColor: colors.orange,
   },
 });

@@ -10,8 +10,10 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import { colors } from "../styles/global";
+import { colors, textStyles } from "../styles/global";
 import React, { useState } from "react";
+// import { useNavigation } from "@react-navigation/native";
+
 import Input from "../components/Input";
 import ButtonPrimary from "../components/ButtonPrimary";
 import ButtonSecondary from "../components/ButtonSecondary";
@@ -21,6 +23,7 @@ const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("screen");
 const LoginScreen: React.FC = () => {
   const [query, setQuery] = useState({ email: "", password: "" });
   const [isVisiblePassw, setIsVisiblePassw] = useState(true);
+  // const navigation = useNavigation();
 
   const onLoginHandler = () => {
     Alert.alert(
@@ -28,9 +31,7 @@ const LoginScreen: React.FC = () => {
       `Email: ${query.email} Password: ${query.password}`
     );
   };
-  const onRegisterHandler = () => {
-    Alert.alert("Register");
-  };
+  const onRegisterHandler = () => {};
   const onChangeHandler = (field: string, text: string) => {
     setQuery((prevState) => ({ ...prevState, [field]: text }));
   };
@@ -80,7 +81,7 @@ const LoginScreen: React.FC = () => {
             </Input>
           </View>
           <View style={[styles.innerContainer, styles.buttonsContainer]}>
-            <ButtonPrimary onPress={onLoginHandler}>
+            <ButtonPrimary onPress={onLoginHandler} isActive={true}>
               <Text style={(styles.baseButtonText, styles.primaryButton)}>
                 Увійти
               </Text>
@@ -133,12 +134,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   title: {
+    ...textStyles.mediumText,
     textAlign: "center",
     color: colors.black,
-    fontFamily: "Roboto-Medium",
-    fontSize: 30,
-    lineHeight: 36,
-    letterSpacing: 1,
   },
   innerContainer: {
     gap: 16,
@@ -152,11 +150,7 @@ const styles = StyleSheet.create({
     marginTop: 42,
     width: "100%",
   },
-  baseButtonText: {
-    fontFamily: "Roboto-Medium",
-    fontSize: 16,
-    lineHeight: 19,
-  },
+  baseButtonText: { ...textStyles.mediumText },
   secondaryButton: {
     color: colors.blue,
   },

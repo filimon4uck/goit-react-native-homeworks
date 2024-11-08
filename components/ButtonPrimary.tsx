@@ -1,6 +1,7 @@
 import {
   StyleProp,
   StyleSheet,
+  Text,
   TextStyle,
   TouchableOpacity,
   ViewStyle,
@@ -9,6 +10,7 @@ import { colors } from "../styles/global";
 import React from "react";
 
 type btnPrimProps = {
+  isActive: boolean;
   children?: React.ReactNode;
   onPress?: () => void;
   buttonStyle?: StyleProp<ViewStyle> | StyleProp<TextStyle>;
@@ -16,15 +18,22 @@ type btnPrimProps = {
 
 const ButtonPrimary: React.FC<btnPrimProps> = ({
   children,
+  isActive = true,
   onPress,
   buttonStyle,
 }) => {
   return (
     <TouchableOpacity
-      style={[styles.primaryButton, buttonStyle]}
+      style={[
+        styles.primaryButton,
+        buttonStyle,
+        isActive && styles.activeButton,
+      ]}
       onPress={onPress}
     >
-      {children}
+      <Text style={isActive ? styles.activeText : styles.notActiveText}>
+        {children}
+      </Text>
     </TouchableOpacity>
   );
 };
@@ -33,9 +42,14 @@ export default ButtonPrimary;
 
 const styles = StyleSheet.create({
   primaryButton: {
-    backgroundColor: colors.orange,
     paddingVertical: 16,
     paddingHorizontal: 32,
     borderRadius: 100,
+    backgroundColor: colors.gray,
+  },
+  activeButton: { backgroundColor: colors.orange },
+  activeText: { color: colors.white },
+  notActiveText: {
+    color: colors.dark_gray,
   },
 });

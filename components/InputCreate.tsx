@@ -4,6 +4,7 @@ import {
   View,
   StyleProp,
   ViewStyle,
+  TextStyle,
 } from "react-native";
 import React, { useState } from "react";
 import { colors, textStyles } from "../styles/global";
@@ -11,6 +12,7 @@ import { colors, textStyles } from "../styles/global";
 type InputProps = {
   placeholder?: string;
   outerStyles?: StyleProp<ViewStyle>;
+  outerStylesText?: StyleProp<TextStyle>;
   children?: React.ReactNode;
   value: string;
   field: string;
@@ -18,9 +20,10 @@ type InputProps = {
   secureTextEntry?: boolean;
 };
 
-const Input: React.FC<InputProps> = ({
+const InputCreate: React.FC<InputProps> = ({
   placeholder,
   outerStyles,
+  outerStylesText,
   children,
   onChangeText,
   value,
@@ -36,41 +39,36 @@ const Input: React.FC<InputProps> = ({
   };
   return (
     <View style={[styles.input, outerStyles, isFocused && styles.focused]}>
+      {children}
       <TextInput
-        style={styles.text}
+        style={[styles.text, outerStylesText]}
         placeholder={placeholder}
+        placeholderTextColor={colors.dark_gray}
         onChangeText={(text) => onChangeText(field, text)}
         onFocus={onFocusHandler}
         onBlur={onBlurHandler}
         value={value}
         secureTextEntry={secureTextEntry}
       />
-      {children}
     </View>
   );
 };
 
-export default Input;
+export default InputCreate;
 
 const styles = StyleSheet.create({
   input: {
     height: 50,
-    borderRadius: 16,
-    borderWidth: 1,
+    borderBottomWidth: 1,
     borderColor: colors.border_gray,
-    backgroundColor: colors.gray,
-    paddingLeft: 16,
-    paddingRight: 16,
     flexDirection: "row",
     alignItems: "center",
+    gap: 4,
   },
   text: {
     ...textStyles.regularText,
     color: colors.black,
     flex: 1,
   },
-  focused: {
-    backgroundColor: colors.white,
-    borderColor: colors.orange,
-  },
+  focused: {},
 });

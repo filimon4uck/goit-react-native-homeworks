@@ -33,7 +33,7 @@ const CommentComp: React.FC<CommentCompProps> = ({
         style={[
           styles.textDataWrapper,
           isEven ? styles.evenWrapper : styles.oddContainer,
-          isEven ? { backgroundColor: "red" } : { backgroundColor: "blue" },
+          { backgroundColor: colors.black_03 },
         ]}
       >
         <Text style={styles.commentText}>{text}</Text>

@@ -16,18 +16,20 @@ import Input from "../components/Input";
 import ButtonPrimary from "../components/ButtonPrimary";
 import ButtonSecondary from "../components/ButtonSecondary";
 import ImageProfile from "../components/ImageProfile";
+import { useNavigation } from "@react-navigation/native";
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("screen");
 
 const RegistrationScreen: React.FC = () => {
+  const navigator = useNavigation();
   const [query, setQuery] = useState({ login: "", email: "", password: "" });
   const [isVisiblePassw, setIsVisiblePassw] = useState(true);
 
   const onLoginHandler = () => {
-    Alert.alert("Login");
+    navigator.navigate("Login");
   };
   const onRegisterHandler = () => {
-    Alert.alert("Register");
+    navigator.navigate("Home");
   };
   const onChangeHandler = (field: string, text: string) => {
     setQuery((prevState) => ({ ...prevState, [field]: text }));

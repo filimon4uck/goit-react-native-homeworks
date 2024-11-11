@@ -13,6 +13,7 @@ import ButtonSecondary from "../components/ButtonSecondary";
 import InputCreate from "../components/InputCreate";
 import MapPin from "../assets/icons/map-pin.svg";
 import ButtonPrimary from "../components/ButtonPrimary";
+import DeleteIcon from "../assets/icons/trash.svg";
 
 const CreatePostsScreen = () => {
   const [query, setQuery] = useState({ title: "", location: "" });
@@ -55,7 +56,7 @@ const CreatePostsScreen = () => {
               onChangeText={onChangeHandler}
               placeholder="Місцевість..."
             >
-              <MapPin />
+              <MapPin stroke={colors.dark_gray} />
             </InputCreate>
           </View>
 
@@ -63,6 +64,9 @@ const CreatePostsScreen = () => {
             <Text style={styles.publishButtonText}>Опублікувати</Text>
           </ButtonPrimary>
         </View>
+        <ButtonSecondary outerStyles={styles.deleteBtn}>
+          <DeleteIcon />
+        </ButtonSecondary>
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
   );
@@ -106,7 +110,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
   },
   addButton: {
-    ...textStyles.mediumText,
+    ...textStyles.regularText,
     color: colors.dark_gray,
   },
   inputsContainer: {
@@ -122,5 +126,15 @@ const styles = StyleSheet.create({
   publishButtonText: {},
   regularText: {
     fontFamily: "Roboto-Regular",
+  },
+  deleteBtn: {
+    width: 70,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: colors.gray,
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    bottom: 22,
   },
 });

@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import { colors, textStyles } from "../styles/global";
 import React, { useState } from "react";
-// import { useNavigation } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 
 import Input from "../components/Input";
 import ButtonPrimary from "../components/ButtonPrimary";
@@ -23,15 +23,14 @@ const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("screen");
 const LoginScreen: React.FC = () => {
   const [query, setQuery] = useState({ email: "", password: "" });
   const [isVisiblePassw, setIsVisiblePassw] = useState(true);
-  // const navigation = useNavigation();
+  const navigation = useNavigation();
 
   const onLoginHandler = () => {
-    Alert.alert(
-      "Credentials",
-      `Email: ${query.email} Password: ${query.password}`
-    );
+    navigation.navigate("Home");
   };
-  const onRegisterHandler = () => {};
+  const onRegisterHandler = () => {
+    navigation.navigate("Register");
+  };
   const onChangeHandler = (field: string, text: string) => {
     setQuery((prevState) => ({ ...prevState, [field]: text }));
   };
@@ -150,7 +149,7 @@ const styles = StyleSheet.create({
     marginTop: 42,
     width: "100%",
   },
-  baseButtonText: { ...textStyles.mediumText },
+  baseButtonText: { ...textStyles.regularText },
   secondaryButton: {
     color: colors.blue,
   },

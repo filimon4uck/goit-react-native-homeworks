@@ -9,7 +9,7 @@ export const colors = {
   blue: "#1B4371",
   orange: "#FF6C00",
   dark_gray: "#BDBDBD",
-  black_03: "rgba(0, 0, 0, 0.03)",
+  black_03: "rgba(0, 0, 0, 0.3)",
 };
 
 export const textStyles = StyleSheet.create({
@@ -23,6 +23,12 @@ export const textStyles = StyleSheet.create({
     fontFamily: "Roboto-Regular",
     fontSize: 16,
     lineHeight: 19,
+  },
+  titleHeaderText: {
+    fontFamily: "Roboto-Medium",
+    fontSize: 17,
+    lineHeight: 22,
+    letterSpacing: -0.41,
   },
 });
 export const commonStyles = StyleSheet.create({

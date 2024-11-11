@@ -10,6 +10,7 @@ import CommentIcon from "../assets/icons/message.svg";
 import MapPinIcon from "../assets/icons/map-pin.svg";
 import LikeIcon from "../assets/icons/thumbs-up.svg";
 import { colors, textStyles } from "../styles/global";
+import ButtonSecondary from "./ButtonSecondary";
 
 type postProps = {
   image?: ImageSourcePropType;
@@ -18,6 +19,7 @@ type postProps = {
   countLikes?: number;
   location?: string;
   country?: string;
+  onButtonPress: () => void;
 };
 
 const Post: React.FC<postProps> = ({
@@ -27,6 +29,7 @@ const Post: React.FC<postProps> = ({
   countLikes,
   location,
   country,
+  onButtonPress,
 }) => {
   return (
     <View style={styles.postContainer}>
@@ -37,10 +40,12 @@ const Post: React.FC<postProps> = ({
       <View style={styles.commentsLocationWrapper}>
         <View style={styles.commentsLikesWrapper}>
           <View style={styles.iconText}>
-            <CommentIcon
-              stroke={countComments > 0 ? colors.orange : colors.dark_gray}
-              fill={countComments > 0 ? colors.orange : "transparent"}
-            />
+            <ButtonSecondary onButtonPress={onButtonPress}>
+              <CommentIcon
+                stroke={countComments > 0 ? colors.orange : colors.dark_gray}
+                fill={countComments > 0 ? colors.orange : "transparent"}
+              />
+            </ButtonSecondary>
             <Text
               style={[
                 textStyles.regularText,
@@ -86,6 +91,7 @@ const styles = StyleSheet.create({
   postContainer: {
     width: "100%",
     gap: 8,
+    marginBottom: 32,
   },
   imageContainer: {
     width: "100%",

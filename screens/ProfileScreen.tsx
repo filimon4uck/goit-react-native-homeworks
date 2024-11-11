@@ -5,14 +5,17 @@ import {
   Text,
   View,
 } from "react-native";
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("screen");
+import { useNavigation } from "@react-navigation/native";
+import { ScrollView } from "react-native-gesture-handler";
+import ButtonSecondary from "../components/ButtonSecondary";
 import ImageProfile from "../components/ImageProfile";
 import { colors, textStyles } from "../styles/global";
 import { posts_data } from "../data/posts_data";
 import Post from "../components/Post";
-import { ScrollView } from "react-native-gesture-handler";
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("screen");
-
+import LogOutIcon from "../assets/icons/log-out.svg";
 const ProfileScreen: React.FC = () => {
+  const navigation = useNavigation();
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -21,13 +24,24 @@ const ProfileScreen: React.FC = () => {
         resizeMode="cover"
       />
       <View style={styles.profileContainer}>
+        <ButtonSecondary
+          onButtonPress={() => {
+            navigation.navigate("Login");
+          }}
+          outerStyles={styles.logout}
+        >
+          <LogOutIcon stroke={colors.dark_gray} />
+        </ButtonSecondary>
         <Text style={styles.name}>Natali Romanova</Text>
         <ImageProfile loadedImage={true} />
-        <ScrollView>
+        <ScrollView style={styles.postsContainer}>
           {posts_data &&
             posts_data.map((post, index) => {
               return (
                 <Post
+                  onButtonPress={() => {
+                    navigation.navigate("Comments");
+                  }}
                   key={index}
                   image={post.postImage}
                   title={post.title}
@@ -52,6 +66,11 @@ const styles = StyleSheet.create({
     overflow: "scroll",
     gap: 32,
   },
+  logout: {
+    position: "absolute",
+    top: 22,
+    right: 16,
+  },
 
   image: {
     ...StyleSheet.absoluteFillObject,
@@ -62,10 +81,9 @@ const styles = StyleSheet.create({
   profileContainer: {
     marginTop: 200,
     position: "relative",
-    paddingHorizontal: 16,
     paddingTop: 92,
     width: SCREEN_WIDTH,
-    height: 600,
+    height: 700,
     backgroundColor: colors.white,
     borderTopRightRadius: 25,
     borderTopLeftRadius: 25,
@@ -81,5 +99,10 @@ const styles = StyleSheet.create({
     ...textStyles.mediumText,
     textAlign: "center",
     color: colors.black,
+  },
+  postsContainer: {
+    gap: 32,
+    paddingHorizontal: 16,
+    marginBottom: 42,
   },
 });

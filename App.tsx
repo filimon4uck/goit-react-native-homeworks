@@ -1,7 +1,7 @@
 import { NavigationContainer } from "@react-navigation/native";
 import * as SplashScreen from "expo-splash-screen";
 import React, { useEffect, useState } from "react";
-// import "react-native-gesture-handler";
+import "react-native-gesture-handler";
 import { useFonts } from "expo-font";
 import { createStackNavigator } from "@react-navigation/stack";
 
@@ -12,9 +12,7 @@ import PostsScreen from "./screens/PostsScreen";
 import CommentsScreen from "./screens/CommentsScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-// import RegistrationScreen from "./screens/RegistrationScreen";
-
-// const MainStack = createStackNavigator();
+import StackNavigator from "./navigation/StackNavigator";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -43,11 +41,10 @@ const App = () => {
   }
 
   return (
-    // <NavigationContainer>
-    //   <BottomTabNavigator />
-    // </NavigationContainer>
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <ProfileScreen />
+      <NavigationContainer>
+        <StackNavigator />
+      </NavigationContainer>
     </GestureHandlerRootView>
   );
 };

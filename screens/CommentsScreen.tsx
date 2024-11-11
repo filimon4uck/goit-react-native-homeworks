@@ -14,12 +14,7 @@ import Input from "../components/Input";
 import ArrowTopIcon from "../assets/icons/arrowTop.svg";
 import ButtonSecondary from "../components/ButtonSecondary";
 
-type Comment = {
-  img: ImageSourcePropType;
-  text: string;
-  date: string;
-};
-const CommentsScreen: React.FC<Comment> = () => {
+const CommentsScreen: React.FC = () => {
   const [query, setQuery] = useState({ comment: "" });
   const onChangeHandler = (field: string, text: string) => {
     setQuery((prevState) => ({ ...prevState, [field]: text }));
@@ -51,9 +46,10 @@ const CommentsScreen: React.FC<Comment> = () => {
           onChangeText={onChangeHandler}
           field="comment"
           outerStyles={styles.input}
+          placeholder="Коментувати..."
         >
           <ButtonSecondary outerStyles={styles.sendBtn}>
-            <ArrowTopIcon></ArrowTopIcon>
+            <ArrowTopIcon />
           </ButtonSecondary>
         </Input>
       </View>

@@ -1,10 +1,20 @@
-import { ImageBackground, StyleSheet, Text, View } from "react-native";
+import {
+  ImageBackground,
+  StyleProp,
+  StyleSheet,
+  Text,
+  View,
+  ViewStyle,
+} from "react-native";
 import { colors } from "../styles/global";
 import React from "react";
+type userProps = {
+  outerStyles?: StyleProp<ViewStyle>;
+};
 
-const User: React.FC = () => {
+const User: React.FC<userProps> = ({ outerStyles }) => {
   return (
-    <View style={styles.userContainer}>
+    <View style={[styles.userContainer, outerStyles]}>
       <View style={styles.imageContainer}>
         <ImageBackground
           style={styles.image}

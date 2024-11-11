@@ -8,7 +8,7 @@ export const posts_data = [
     country: "Ukraine",
   },
   {
-    postImage: require("../assets/images/Content Block.png"),
+    postImage: require("../assets/images/ContentBlock.png"),
     title: "Захід на Чорному морі",
     count_comments: 3,
     likes: 200,

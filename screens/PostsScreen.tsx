@@ -24,6 +24,7 @@ const PostsScreen = () => {
                 title={post.title}
                 countComments={post.count_comments}
                 location={post.location}
+                coordinates={post.coordinates}
               />
             );
           })}

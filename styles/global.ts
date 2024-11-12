@@ -10,6 +10,7 @@ export const colors = {
   orange: "#FF6C00",
   dark_gray: "#BDBDBD",
   black_03: "rgba(0, 0, 0, 0.3)",
+  white_03: "rgba(255, 255, 255, 0.3)",
 };
 
 export const textStyles = StyleSheet.create({

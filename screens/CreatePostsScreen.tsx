@@ -7,18 +7,35 @@ import {
 } from "react-native";
 import { Text, TouchableWithoutFeedback } from "react-native";
 import { useState } from "react";
+import * as Location from "expo-location";
 import { colors, commonStyles, textStyles } from "../styles/global";
-import CameraIcon from "../assets/icons/camera.svg";
 import ButtonSecondary from "../components/ButtonSecondary";
 import InputCreate from "../components/InputCreate";
 import MapPin from "../assets/icons/map-pin.svg";
 import ButtonPrimary from "../components/ButtonPrimary";
 import DeleteIcon from "../assets/icons/trash.svg";
+import Camera from "../components/Camera";
+import { useNavigation } from "@react-navigation/native";
 
 const CreatePostsScreen = () => {
   const [query, setQuery] = useState({ title: "", location: "" });
   const onChangeHandler = (field: string, text: string) => {
     setQuery((prevState) => ({ ...prevState, [field]: text }));
+  };
+  const [location, setLocation] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
+  const navigation = useNavigation();
+
+  const OnButtonPress = async () => {
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== "granted") {
+      setErrorMsg("Permission to access location was denied");
+      return;
+    }
+
+    let location = await Location.getCurrentPositionAsync({});
+    setLocation(location);
+    navigation.navigate("Posts");
   };
 
   return (
@@ -30,11 +47,7 @@ const CreatePostsScreen = () => {
       >
         <View style={styles.addImageContainer}>
           <View style={styles.imageBtnWrapper}>
-            <View style={styles.addImage}>
-              <View style={styles.cameraContainer}>
-                <CameraIcon fill={colors.border_gray} width={24} height={24} />
-              </View>
-            </View>
+            <Camera />
             <ButtonSecondary>
               <Text style={styles.addButton}>Завантажте фото</Text>
             </ButtonSecondary>
@@ -60,7 +73,11 @@ const CreatePostsScreen = () => {
             </InputCreate>
           </View>
 
-          <ButtonPrimary isActive={false} buttonStyle={styles.publishButton}>
+          <ButtonPrimary
+            onPress={OnButtonPress}
+            isActive={true}
+            buttonStyle={styles.publishButton}
+          >
             <Text style={styles.publishButtonText}>Опублікувати</Text>
           </ButtonPrimary>
         </View>
@@ -77,6 +94,7 @@ export default CreatePostsScreen;
 const styles = StyleSheet.create({
   container: {
     ...commonStyles.container,
+
     backgroundColor: colors.white,
     justifyContent: "flex-start",
     alignItems: "center",
@@ -88,26 +106,8 @@ const styles = StyleSheet.create({
   },
   imageBtnWrapper: {
     gap: 8,
-    minHeight: 267,
-  },
-  addImage: {
-    width: "100%",
-    height: "34%",
-    minHeight: 240,
-    borderRadius: 8,
-    backgroundColor: colors.gray,
-    borderWidth: 1,
-    borderColor: colors.border_gray,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  cameraContainer: {
-    width: 60,
-    height: 60,
-    borderRadius: 100,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: colors.white,
+    height: "50%",
+    minHeight: 314,
   },
   addButton: {
     ...textStyles.regularText,

@@ -7,6 +7,7 @@ import { colors, textStyles } from "../styles/global";
 import ButtonSecondary from "../components/ButtonSecondary";
 import { useNavigation } from "@react-navigation/native";
 import BackIcon from "../assets/icons/arrow-left.svg";
+import MapScreen from "../screens/MapScreen";
 
 const Stack = createStackNavigator();
 
@@ -58,6 +59,29 @@ const StackNavigator = () => {
             paddingRight: 16,
           },
         }}
+      />
+      <Stack.Screen
+        name={"Map"}
+        component={MapScreen}
+        options={({ navigation }) => ({
+          headerTitle: "Карти",
+          headerTitleStyle: textStyles.titleHeaderText,
+          headerLeftContainerStyle: {
+            paddingLeft: 16,
+          },
+          headerRightContainerStyle: {
+            paddingRight: 16,
+          },
+          headerLeft: () => (
+            <ButtonSecondary
+              onButtonPress={() => {
+                navigation.goBack();
+              }}
+            >
+              <BackIcon stroke={colors.dark_gray} />
+            </ButtonSecondary>
+          ),
+        })}
       />
     </Stack.Navigator>
   );

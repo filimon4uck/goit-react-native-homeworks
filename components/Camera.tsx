@@ -61,17 +61,20 @@ export default Camera;
 
 const styles = StyleSheet.create({
   container: {
-    borderRadius: 8,
     flex: 2,
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 8,
+    borderBottomLeftRadius: 8,
+    borderBottomRightRadius: 8,
     justifyContent: "center",
+    overflow: "hidden",
   },
   message: {
     textAlign: "center",
     paddingBottom: 10,
   },
   camera: {
-    position: "relative",
-    flex: 1,
+    flex: 2,
   },
   buttonContainer: {
     flexDirection: "row",

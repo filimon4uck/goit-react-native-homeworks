@@ -11,22 +11,39 @@ import {
   View,
 } from "react-native";
 import { colors, textStyles } from "../styles/global";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 
 import Input from "../components/Input";
 import ButtonPrimary from "../components/ButtonPrimary";
 import ButtonSecondary from "../components/ButtonSecondary";
+import { stackParamList } from "../navigation/StackNavigator";
+import { StackScreenProps } from "@react-navigation/stack";
+import { login } from "../utils/auth";
+import { useDispatch } from "react-redux";
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("screen");
 
-const LoginScreen: React.FC = () => {
+export type LoginScreenProps = StackScreenProps<stackParamList, "Login">;
+
+const LoginScreen: React.FC<LoginScreenProps> = () => {
+  const navigation = useNavigation<LoginScreenProps["navigation"]>();
   const [query, setQuery] = useState({ email: "", password: "" });
   const [isVisiblePassw, setIsVisiblePassw] = useState(true);
-  const navigation = useNavigation();
-
-  const onLoginHandler = () => {
-    navigation.navigate("Home");
+  // if i want to clear fields when login is unfocused
+  // useEffect(() => {
+  //   navigation.addListener("blur", clearFields);
+  // }, [navigation]);
+  // const clearFields = () => {
+  //   setQuery({ email: "", password: "" });
+  // };
+  const dispatch = useDispatch();
+  const onLoginHandler = async () => {
+    try {
+      await login(query, dispatch);
+    } catch (error) {
+      console.log("Error login", error);
+    }
   };
   const onRegisterHandler = () => {
     navigation.navigate("Register");
@@ -52,7 +69,7 @@ const LoginScreen: React.FC = () => {
         />
 
         <KeyboardAvoidingView
-          behavior={Platform.OS === "android" ? "height" : "padding"}
+          behavior={Platform.OS === "android" ? undefined : "padding"}
           style={styles.formContainer}
         >
           <Text style={styles.title}>Увійти</Text>

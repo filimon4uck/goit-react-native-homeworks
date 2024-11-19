@@ -2,10 +2,17 @@ import React, { useEffect, useState } from "react";
 import { View, StyleSheet, Dimensions } from "react-native";
 import * as Location from "expo-location";
 import MapView, { Marker } from "react-native-maps";
+import { StackScreenProps } from "@react-navigation/stack";
+import { stackParamList } from "../navigation/StackNavigator";
+type LoginScreenProps = StackScreenProps<stackParamList, "Login">;
 
-const MapScreen = ({ route }) => {
-  const [location, setLocation] = useState(null);
-  const [title, setTitle] = useState(null);
+const MapScreen: React.FC<LoginScreenProps> = ({ route }) => {
+  const [location, setLocation] = useState<{
+    latitude: number;
+    longitude: number;
+  } | null>(null);
+  const [title, setTitle] = useState<string | undefined>(undefined);
+  const [error, setErrorMsg] = useState<string | null>(null);
 
   useEffect(() => {
     (async () => {
@@ -14,11 +21,11 @@ const MapScreen = ({ route }) => {
         setErrorMsg("Permission to access location was denied");
         return;
       }
-
-      const location = route.params.coordinates;
-      const title = route.params.title;
-      setLocation(location);
-      setTitle(title);
+      if (route.params) {
+        const { coordinates, title } = route.params;
+        setLocation(coordinates);
+        setTitle(title);
+      }
     })();
   }, []);
 
@@ -27,15 +34,17 @@ const MapScreen = ({ route }) => {
       <MapView
         style={styles.mapStyle}
         region={{
-          latitude: location ? location.latitude : 37.78825,
-          longitude: location ? location.longitude : -122.4324,
+          latitude: location?.latitude ?? 37.78825,
+          longitude: location?.longitude ?? -122.4324,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
         showsUserLocation={true}
         mapType="standard"
       >
-        <Marker title={title} coordinate={location}></Marker>
+        {location && title && (
+          <Marker title={title} coordinate={location}></Marker>
+        )}
       </MapView>
     </View>
   );

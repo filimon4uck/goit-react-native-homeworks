@@ -1,6 +1,6 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Pressable, StyleSheet } from "react-native";
-import React, { useState } from "react";
+import React from "react";
 import PostsScreen from "../screens/PostsScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import CreatePostsScreen from "../screens/CreatePostsScreen";
@@ -13,9 +13,18 @@ import { colors } from "../styles/global";
 import ButtonSecondary from "../components/ButtonSecondary";
 import { textStyles } from "../styles/global";
 import LogOutIcon from "../assets/icons/log-out.svg";
+import { StackScreenProps } from "@react-navigation/stack";
+import { stackParamList } from "./StackNavigator";
+import { logout } from "../utils/auth";
+import { useDispatch } from "react-redux";
 const Tab = createBottomTabNavigator();
+type HomeScreenProps = StackScreenProps<stackParamList, "Home">;
 
-const BottomTabNavigator = () => {
+const BottomTabNavigator: React.FC<HomeScreenProps> = () => {
+  const dispatch = useDispatch();
+  const onLogout = async () => {
+    await logout(dispatch);
+  };
   return (
     <Tab.Navigator
       initialRouteName="Posts"
@@ -40,20 +49,18 @@ const BottomTabNavigator = () => {
         headerTitleAlign: "center",
         tabBarHideOnKeyboard: true,
         tabBarItemStyle: [styles.tabBarItem],
+        sceneStyle: { backgroundColor: colors.white },
       })}
     >
       <Tab.Screen
         name="Posts"
-        component={PostsScreen}
-        options={({ navigation }) => ({
+        component={PostsScreen as React.FC}
+        options={() => ({
           headerTitle: "Публікації",
           headerTitleStyle: textStyles.titleHeaderText,
+
           headerRight: () => (
-            <ButtonSecondary
-              onButtonPress={() => {
-                navigation.navigate("Login");
-              }}
-            >
+            <ButtonSecondary onButtonPress={onLogout}>
               <LogOutIcon stroke={colors.dark_gray} />
             </ButtonSecondary>
           ),

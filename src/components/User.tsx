@@ -8,22 +8,25 @@ import {
 } from "react-native";
 import { colors } from "../styles/global";
 import React from "react";
+import { useSelector } from "react-redux";
+import { selectUserInfo } from "../store/authSlice/selectors";
 type userProps = {
   outerStyles?: StyleProp<ViewStyle>;
 };
 
 const User: React.FC<userProps> = ({ outerStyles }) => {
+  const userInfo = useSelector(selectUserInfo);
   return (
     <View style={[styles.userContainer, outerStyles]}>
       <View style={styles.imageContainer}>
         <ImageBackground
           style={styles.image}
-          source={require("../assets/images/user_image.png")}
+          source={{ uri: userInfo?.photoURL }}
         ></ImageBackground>
       </View>
       <View style={styles.nameEmailWrapper}>
-        <Text style={styles.nameText}>Natali Romanova</Text>
-        <Text style={styles.email}>email@example.com</Text>
+        <Text style={styles.nameText}>{userInfo?.displayName}</Text>
+        <Text style={styles.email}>{userInfo?.email}</Text>
       </View>
     </View>
   );
@@ -40,13 +43,14 @@ const styles = StyleSheet.create({
   imageContainer: {
     width: 60,
     height: 60,
-    borderRadius: 16,
   },
   image: {
     ...StyleSheet.absoluteFillObject,
     width: "100%",
     height: "100%",
     resizeMode: "cover",
+    borderRadius: 16,
+    overflow: "hidden",
   },
   nameEmailWrapper: {},
   nameText: {

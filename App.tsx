@@ -3,24 +3,22 @@ import * as SplashScreen from "expo-splash-screen";
 import React, { useEffect, useState } from "react";
 import "react-native-gesture-handler";
 import { useFonts } from "expo-font";
-import { createStackNavigator } from "@react-navigation/stack";
-
-import LoginScreen from "./screens/LoginScreen";
-import BottomTabNavigator from "./navigation/BottomTabNavigator";
-import CreatePostsScreen from "./screens/CreatePostsScreen";
-import PostsScreen from "./screens/PostsScreen";
-import CommentsScreen from "./screens/CommentsScreen";
-import ProfileScreen from "./screens/ProfileScreen";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import StackNavigator from "./navigation/StackNavigator";
+import StackNavigator from "./src/navigation/StackNavigator";
+import { Provider, useDispatch } from "react-redux";
+import store from "./src/store/store";
+import { PersistGate } from "redux-persist/integration/react";
+import { authStateChanged } from "./src/utils/auth";
+import { colors } from "./src/styles/global";
+import { View } from "react-native";
 
 SplashScreen.preventAutoHideAsync();
 
 const App = () => {
   const [fontsLoaded] = useFonts({
-    "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
-    "Roboto-Medium": require("./assets/fonts/Roboto-Medium.ttf"),
-    "Roboto-Bold": require("./assets/fonts/Roboto-Bold.ttf"),
+    "Roboto-Regular": require("./src/assets/fonts/Roboto-Regular.ttf"),
+    "Roboto-Medium": require("./src/assets/fonts/Roboto-Medium.ttf"),
+    "Roboto-Bold": require("./src/assets/fonts/Roboto-Bold.ttf"),
   });
 
   const [appIsReady, setAppIsReady] = useState(false);
@@ -37,16 +35,32 @@ const App = () => {
   }, [fontsLoaded]);
 
   if (!appIsReady) {
-    return null;
+    return undefined;
   }
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <NavigationContainer>
-        <StackNavigator />
-      </NavigationContainer>
-    </GestureHandlerRootView>
+    <Provider store={store.store}>
+      <PersistGate persistor={store.persistor}>
+        <GestureHandlerRootView style={{ flex: 1 }}>
+          <AuthListener />
+        </GestureHandlerRootView>
+      </PersistGate>
+    </Provider>
   );
 };
 
 export default App;
+
+const AuthListener = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    authStateChanged(dispatch);
+  }, [dispatch]);
+
+  return (
+    <NavigationContainer>
+      <StackNavigator />
+    </NavigationContainer>
+  );
+};

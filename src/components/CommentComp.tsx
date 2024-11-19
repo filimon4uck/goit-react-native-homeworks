@@ -10,14 +10,14 @@ import { colors, textStyles } from "../styles/global";
 import { comments_data } from "../data/comments_data";
 
 type CommentCompProps = {
-  image: ImageSourcePropType;
+  imageURL: string;
   text: string;
   date: string;
   isEven: boolean;
 };
 
 const CommentComp: React.FC<CommentCompProps> = ({
-  image,
+  imageURL,
   text,
   date,
   isEven,
@@ -27,7 +27,7 @@ const CommentComp: React.FC<CommentCompProps> = ({
       style={isEven ? styles.commentContainer : styles.commentContainerEven}
     >
       <View style={styles.commentImage}>
-        <Image source={image} />
+        <Image style={styles.commentImage} source={{ uri: imageURL }} />
       </View>
       <View
         style={[
@@ -55,6 +55,7 @@ const styles = StyleSheet.create({
     width: 28,
     height: 28,
     borderRadius: 100,
+    overflow: "hidden",
   },
   textDataWrapper: {
     flex: 1,

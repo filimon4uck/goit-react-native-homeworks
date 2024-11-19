@@ -12,18 +12,19 @@ import LikeIcon from "../assets/icons/thumbs-up.svg";
 import { colors, textStyles } from "../styles/global";
 import ButtonSecondary from "./ButtonSecondary";
 import { useNavigation } from "@react-navigation/native";
-type coordType = {
+import { StackNavigationProp } from "@react-navigation/stack";
+import { stackParamList } from "../navigation/StackNavigator";
+export type coordType = {
   latitude: number;
   longitude: number;
 };
-
+type NavigationProp = StackNavigationProp<stackParamList, "Map">;
 type postProps = {
   coordinates?: coordType;
   image?: ImageSourcePropType;
   title: string;
   countComments: number;
   countLikes?: number;
-  location?: string;
   country?: string;
   onButtonPress: () => void;
 };
@@ -33,12 +34,11 @@ const Post: React.FC<postProps> = ({
   title,
   countComments = 0,
   countLikes,
-  location,
   country,
   coordinates,
   onButtonPress,
 }) => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp>();
   return (
     <View style={styles.postContainer}>
       <View style={styles.imageContainer}>
@@ -89,10 +89,7 @@ const Post: React.FC<postProps> = ({
           >
             <MapPinIcon stroke={colors.dark_gray} />
           </ButtonSecondary>
-          <Text style={textStyles.regularText}>
-            {location && location}
-            {country && country}
-          </Text>
+          <Text style={textStyles.regularText}>{country}</Text>
         </View>
       </View>
     </View>

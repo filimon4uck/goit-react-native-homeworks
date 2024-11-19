@@ -14,11 +14,46 @@ import Input from "../components/Input";
 import ArrowTopIcon from "../assets/icons/arrowTop.svg";
 import ButtonSecondary from "../components/ButtonSecondary";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { RouteProp } from "@react-navigation/native";
+import { stackParamList } from "../navigation/StackNavigator";
+import { useDispatch, useSelector } from "react-redux";
+import { selectPosts } from "../store/postsSlice/selectors";
+import { selectUserInfo } from "../store/authSlice/selectors";
+import { formatDate } from "../helpers/dateFormat";
+import { updatePostDataInFirestore } from "../utils/firestore";
+import { updatePost } from "../store/postsSlice/slice";
 
-const CommentsScreen: React.FC = () => {
+type CommentsScreenProps = RouteProp<stackParamList, "Comments">;
+
+const CommentsScreen = ({ route }: { route: CommentsScreenProps }) => {
   const [query, setQuery] = useState({ comment: "" });
   const onChangeHandler = (field: string, text: string) => {
     setQuery((prevState) => ({ ...prevState, [field]: text }));
+  };
+  const { id } = route.params;
+  const posts = useSelector(selectPosts);
+  const userInfo = useSelector(selectUserInfo);
+  const post = posts.find((post) => post.id === id);
+  const dispatch = useDispatch();
+  const onSendComment = async () => {
+    if (!userInfo?.photoURL || !id || !post) {
+      console.error("Missing required data to send a comment");
+      return;
+    }
+    setQuery({ comment: "" });
+    const newComment = {
+      avatar: userInfo?.photoURL,
+      text: query.comment,
+      date: formatDate(new Date()),
+    };
+
+    const updatedPost = {
+      ...post,
+      comments: [...post?.comments, newComment],
+    };
+
+    const res = await updatePostDataInFirestore(userInfo?.uid, id, updatedPost);
+    if (res) dispatch(updatePost(res));
   };
 
   return (
@@ -30,17 +65,14 @@ const CommentsScreen: React.FC = () => {
           enableAutomaticScroll={Platform.OS === "ios"}
         >
           <View style={styles.imageContainer}>
-            <Image
-              style={styles.image}
-              source={require("../assets/images/ContentBlock.png")}
-            />
+            <Image style={styles.image} source={{ uri: post?.photoURL }} />
           </View>
           <View style={styles.commentsContainer}>
-            {comments_data.map((comment, index) => (
+            {post?.comments.map((comment, index) => (
               <CommentComp
                 key={index}
                 isEven={index % 2 === 0}
-                image={comment.img}
+                imageURL={comment.avatar}
                 text={comment.text}
                 date={comment.date}
               />
@@ -53,7 +85,12 @@ const CommentsScreen: React.FC = () => {
             outerStyles={styles.input}
             placeholder="Коментувати..."
           >
-            <ButtonSecondary outerStyles={styles.sendBtn}>
+            <ButtonSecondary
+              onButtonPress={() => {
+                onSendComment();
+              }}
+              outerStyles={styles.sendBtn}
+            >
               <ArrowTopIcon />
             </ButtonSecondary>
           </Input>
@@ -79,6 +116,9 @@ const styles = StyleSheet.create({
   image: {
     objectFit: "fill",
     width: "100%",
+    height: "100%",
+    borderRadius: 8,
+    overflow: "hidden",
   },
   commentsContainer: {
     marginBottom: 32,

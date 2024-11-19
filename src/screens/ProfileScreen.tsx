@@ -14,8 +14,23 @@ import { colors, textStyles } from "../styles/global";
 import { posts_data } from "../data/posts_data";
 import Post from "../components/Post";
 import LogOutIcon from "../assets/icons/log-out.svg";
+import { StackScreenProps } from "@react-navigation/stack";
+import { stackParamList } from "../navigation/StackNavigator";
+import { logout } from "../utils/auth";
+import { useDispatch, useSelector } from "react-redux";
+import { selectUserInfo } from "../store/authSlice/selectors";
+import { useEffect } from "react";
+import { selectPosts } from "../store/postsSlice/selectors";
+
+type ProfileScreenProps = StackScreenProps<stackParamList, "Profile">;
 const ProfileScreen: React.FC = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<ProfileScreenProps["navigation"]>();
+  const userInfo = useSelector(selectUserInfo);
+  const posts = useSelector(selectPosts);
+  const dispatch = useDispatch();
+  const onLogout = async () => {
+    await logout(dispatch);
+  };
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -24,33 +39,33 @@ const ProfileScreen: React.FC = () => {
         resizeMode="cover"
       />
       <View style={styles.profileContainer}>
-        <ButtonSecondary
-          onButtonPress={() => {
-            navigation.navigate("Login");
-          }}
-          outerStyles={styles.logout}
-        >
+        <ButtonSecondary onButtonPress={onLogout} outerStyles={styles.logout}>
           <LogOutIcon stroke={colors.dark_gray} />
         </ButtonSecondary>
-        <Text style={styles.name}>Natali Romanova</Text>
-        <ImageProfile loadedImage={true} />
+        <Text style={styles.name}>{userInfo?.displayName}</Text>
+        <ImageProfile />
         <ScrollView style={styles.postsContainer}>
-          {posts_data &&
-            posts_data.map((post, index) => {
+          {posts.length > 0 ? (
+            posts.map((post, index) => {
               return (
                 <Post
                   onButtonPress={() => {
-                    navigation.navigate("Comments");
+                    navigation.navigate("Comments", { id: post.id });
                   }}
                   key={index}
-                  image={post.postImage}
+                  image={{ uri: post.photoURL }}
                   title={post.title}
-                  countComments={post.count_comments}
-                  countLikes={post.likes}
+                  countComments={post.comments.length}
                   country={post.country}
+                  coordinates={post.coordinates}
                 />
               );
-            })}
+            })
+          ) : (
+            <View>
+              <Text>There is no posts</Text>
+            </View>
+          )}
         </ScrollView>
       </View>
     </View>

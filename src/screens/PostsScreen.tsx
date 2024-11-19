@@ -1,33 +1,44 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import User from "../components/User";
 import Post from "../components/Post";
 import { posts_data } from "../data/posts_data";
 import { useNavigation } from "@react-navigation/native";
 import { ScrollView } from "react-native-gesture-handler";
 import { colors } from "../styles/global";
+import { StackScreenProps } from "@react-navigation/stack";
+import { stackParamList } from "../navigation/StackNavigator";
+import { useSelector } from "react-redux";
+import { selectPosts } from "../store/postsSlice/selectors";
 
-const PostsScreen = () => {
-  const navigation = useNavigation();
+type PostsScreenProps = StackScreenProps<stackParamList, "Posts">;
+const PostsScreen: React.FC<PostsScreenProps> = () => {
+  const navigation = useNavigation<PostsScreenProps["navigation"]>();
+  const posts = useSelector(selectPosts);
   return (
     <View style={styles.container}>
       <User outerStyles={{ paddingHorizontal: 16 }} />
       <ScrollView style={styles.postsContainer}>
-        {posts_data &&
-          posts_data.map((post, index) => {
+        {posts.length > 0 ? (
+          posts.map((post, index) => {
             return (
               <Post
                 onButtonPress={() => {
-                  navigation.navigate("Comments");
+                  navigation.navigate("Comments", { id: post.id });
                 }}
                 key={index}
-                image={post.postImage}
+                image={{ uri: post.photoURL }}
                 title={post.title}
-                countComments={post.count_comments}
-                location={post.location}
+                countComments={post.comments.length}
+                country={post.country}
                 coordinates={post.coordinates}
               />
             );
-          })}
+          })
+        ) : (
+          <View>
+            <Text>There is no posts</Text>
+          </View>
+        )}
       </ScrollView>
     </View>
   );

@@ -1,16 +1,18 @@
 import { CameraType, CameraView, useCameraPermissions } from "expo-camera";
 import React, { useRef, useState } from "react";
-import * as MediaLibrary from "expo-media-library";
 import { View, Text, Button, StyleSheet } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import ButtonSecondary from "./ButtonSecondary";
 import CameraIcon from "../assets/icons/camera.svg";
 import { colors, textStyles } from "../styles/global";
 
-const Camera: React.FC = () => {
+const Camera: React.FC<{
+  onPictureTaken: (uri: string) => void;
+  setPictureTaken: (state: boolean) => void;
+}> = ({ onPictureTaken, setPictureTaken }) => {
   const [facing, setFacing] = useState<CameraType>("back");
   const [permission, requestPermission] = useCameraPermissions();
-  const camera = useRef();
+  const camera = useRef<CameraView | null>(null);
 
   if (!permission) {
     return (
@@ -24,7 +26,10 @@ const Camera: React.FC = () => {
   }
   const takePicture = async () => {
     const image = await camera?.current?.takePictureAsync();
-    await MediaLibrary.saveToLibraryAsync(image.uri);
+    if (image) {
+      onPictureTaken(image.uri);
+      setPictureTaken(true);
+    } else console.log("Failed take picture");
   };
 
   if (!permission.granted) {

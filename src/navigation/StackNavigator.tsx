@@ -8,37 +8,59 @@ import ButtonSecondary from "../components/ButtonSecondary";
 import { useNavigation } from "@react-navigation/native";
 import BackIcon from "../assets/icons/arrow-left.svg";
 import MapScreen from "../screens/MapScreen";
+import { coordType } from "../components/Post";
+import React from "react";
+import { useSelector } from "react-redux";
+import { selectUserInfo } from "../store/authSlice/selectors";
+import { View } from "react-native";
 
 const Stack = createStackNavigator();
+export type stackParamList = {
+  Login: undefined;
+  Register: undefined;
+  Home: undefined;
+  Comments: { id: string };
+  Map: { coordinates: coordType | undefined; title: string };
+  Profile: undefined;
+  Posts: undefined;
+};
 
 const StackNavigator = () => {
+  const user = useSelector(selectUserInfo);
+
   const navigation = useNavigation();
   return (
-    <Stack.Navigator initialRouteName="Login">
-      <Stack.Screen
-        name="Login"
-        component={LoginScreen}
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name={"Register"}
-        component={RegistrationScreen}
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name={"Home"}
-        component={BottomTabNavigator}
-        options={{
-          headerShown: false,
-        }}
-      />
+    <Stack.Navigator>
+      {!user ? (
+        <>
+          <Stack.Screen
+            name="Login"
+            component={LoginScreen as React.FC}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name={"Register"}
+            component={RegistrationScreen as React.FC}
+            options={{
+              headerShown: false,
+            }}
+          />
+        </>
+      ) : (
+        <Stack.Screen
+          name={"Home"}
+          component={BottomTabNavigator as React.FC}
+          options={{
+            headerShown: false,
+          }}
+        />
+      )}
+
       <Stack.Screen
         name={"Comments"}
-        component={CommentsScreen}
+        component={CommentsScreen as React.FC}
         options={{
           title: "Коментарі",
           headerTitleAlign: "center",
@@ -62,7 +84,7 @@ const StackNavigator = () => {
       />
       <Stack.Screen
         name={"Map"}
-        component={MapScreen}
+        component={MapScreen as React.FC}
         options={({ navigation }) => ({
           headerTitle: "Карти",
           headerTitleStyle: textStyles.titleHeaderText,

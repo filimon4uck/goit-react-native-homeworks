@@ -11,25 +11,33 @@ import {
   View,
 } from "react-native";
 import { colors, textStyles } from "../styles/global";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Input from "../components/Input";
 import ButtonPrimary from "../components/ButtonPrimary";
 import ButtonSecondary from "../components/ButtonSecondary";
-import ImageProfile from "../components/ImageProfile";
 import { useNavigation } from "@react-navigation/native";
+import { register } from "../utils/auth";
+import ImageProfile from "../components/ImageProfile";
+import { StackScreenProps } from "@react-navigation/stack";
+import { stackParamList } from "../navigation/StackNavigator";
+import { selectUserInfo } from "../store/authSlice/selectors";
+import { useDispatch } from "react-redux";
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("screen");
+export type HomeScreenProps = StackScreenProps<stackParamList, "Login">;
 
-const RegistrationScreen: React.FC = () => {
-  const navigator = useNavigation();
+const RegistrationScreen: React.FC<HomeScreenProps> = () => {
+  const navigator = useNavigation<HomeScreenProps["navigation"]>();
   const [query, setQuery] = useState({ login: "", email: "", password: "" });
+  const [imageUri, setImageUri] = useState<string | undefined>(undefined);
   const [isVisiblePassw, setIsVisiblePassw] = useState(true);
-
+  const dispatch = useDispatch();
   const onLoginHandler = () => {
     navigator.navigate("Login");
   };
   const onRegisterHandler = () => {
-    navigator.navigate("Home");
+    const { email, password, login } = query;
+    register({ email, password, login, photoURL: imageUri }, dispatch);
   };
   const onChangeHandler = (field: string, text: string) => {
     setQuery((prevState) => ({ ...prevState, [field]: text }));
@@ -52,12 +60,12 @@ const RegistrationScreen: React.FC = () => {
         />
 
         <KeyboardAvoidingView
-          behavior={Platform.OS === "android" ? "padding" : "padding"}
+          behavior={Platform.OS === "ios" ? "padding" : undefined}
           style={styles.formContainer}
         >
-          <ImageProfile loadedImage={true} />
+          <ImageProfile setLoadedImage={setImageUri} />
           <Text style={styles.title}>Реєстрація</Text>
-          <View style={[, styles.innerContainer, styles.inputsContainer]}>
+          <View style={[styles.innerContainer, styles.inputsContainer]}>
             <Input
               placeholder="Логін"
               onChangeText={onChangeHandler}
@@ -128,7 +136,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: 92,
     width: SCREEN_WIDTH,
-    height: "68%",
+    minHeight: "68%",
+    maxHeight: Platform.OS === "android" ? "68%" : "78%",
     backgroundColor: colors.white,
     borderTopRightRadius: 25,
     borderTopLeftRadius: 25,

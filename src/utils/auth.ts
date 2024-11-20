@@ -23,7 +23,11 @@ export const register = async (
   dispatch: AppDispatch
 ) => {
   try {
-    const result = await createUserWithEmailAndPassword(auth, email, password);
+    const result = await createUserWithEmailAndPassword(
+      auth,
+      email.trim(),
+      password.trim()
+    );
     const user = result.user;
 
     let avatarUrl = "";
@@ -51,7 +55,11 @@ export const login = async (
   dispatch: AppDispatch
 ) => {
   try {
-    const result = await signInWithEmailAndPassword(auth, email, password);
+    const result = await signInWithEmailAndPassword(
+      auth,
+      email.trim(),
+      password.trim()
+    );
     const user = result.user;
 
     const userData = await getUser(user.uid);

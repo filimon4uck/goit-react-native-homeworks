@@ -14,10 +14,11 @@ type imageProfileProps = {
 };
 const ImageProfile: React.FC<imageProfileProps> = ({ setLoadedImage }) => {
   const userInfo = useSelector(selectUserInfo);
-  const [urlImage, setUrlImage] = useState<string | undefined>(undefined);
+  const [urlImage, setUrlImage] = useState<string | undefined>(
+    userInfo?.photoURL
+  );
 
   const dispatch = useDispatch();
-
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ["images"],
@@ -26,7 +27,6 @@ const ImageProfile: React.FC<imageProfileProps> = ({ setLoadedImage }) => {
     });
     if (!result.canceled) {
       if (setLoadedImage) setLoadedImage(result.assets[0].uri);
-      // setUriImage(result.assets[0].uri);
       if (userInfo) {
         const photoUrl = await updateUserAvatar(
           userInfo.uid,
@@ -48,25 +48,23 @@ const ImageProfile: React.FC<imageProfileProps> = ({ setLoadedImage }) => {
       <Image
         style={styles.image}
         source={{
-          uri: userInfo?.photoURL,
+          uri: urlImage,
         }}
       />
       <View
         style={[
           styles.addIcon,
           {
-            borderColor: userInfo?.photoURL
-              ? colors.border_gray
-              : colors.orange,
+            borderColor: urlImage ? colors.border_gray : colors.orange,
             backgroundColor: colors.white,
           },
         ]}
       >
         <Plus
           style={{
-            transform: [{ rotate: userInfo?.photoURL ? "45deg" : "0deg" }],
+            transform: [{ rotate: urlImage ? "45deg" : "0deg" }],
           }}
-          fill={userInfo?.photoURL ? colors.border_gray : colors.orange}
+          fill={urlImage ? colors.border_gray : colors.orange}
           width={13}
           height={13}
         />

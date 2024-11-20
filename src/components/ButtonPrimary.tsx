@@ -18,12 +18,13 @@ type btnPrimProps = {
 
 const ButtonPrimary: React.FC<btnPrimProps> = ({
   children,
-  isActive = true,
+  isActive,
   onPress,
   buttonStyle,
 }) => {
   return (
     <TouchableOpacity
+      disabled={!isActive}
       style={[
         styles.primaryButton,
         buttonStyle,

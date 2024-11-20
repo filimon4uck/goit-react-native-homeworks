@@ -78,8 +78,9 @@ const CreatePostsScreen = () => {
   };
   const onPublic = async () => {
     if (userInfo) {
+      const id = `${Date.now()}-${Math.floor(Math.random() * 10000)}`;
       const result = await addDataToFirestore(userInfo?.uid, posts, {
-        id: "",
+        id: id,
         title: query.title,
         photoURL: loadedImage || "",
         coordinates: location?.coords,
@@ -165,7 +166,9 @@ const CreatePostsScreen = () => {
 
           <ButtonPrimary
             onPress={onPublic}
-            isActive={true}
+            isActive={
+              query.country !== "" && query.title !== "" && loadedImage != null
+            }
             buttonStyle={styles.publishButton}
           >
             <Text style={styles.publishButtonText}>Опублікувати</Text>

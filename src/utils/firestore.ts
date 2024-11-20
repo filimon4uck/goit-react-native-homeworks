@@ -19,7 +19,6 @@ export const getUserPosts = async (userId: string) => {
   const docRef = doc(db, "posts", userId);
   const docSnap = await getDoc(docRef);
   if (docSnap.exists()) {
-    console.log("USER POSTS//////////////", docSnap.data().posts);
     return docSnap.data().posts;
   } else {
     return null;
@@ -60,6 +59,7 @@ export const addDataToFirestore = async (
   uid: string,
   userPosts: PostType[],
   {
+    id,
     title,
     photoURL,
     coordinates,
@@ -69,7 +69,7 @@ export const addDataToFirestore = async (
   }: PostType
 ): Promise<PostType | null> => {
   const url = await uploadFile(photoURL, "postsImages", title);
-  const id = `${Date.now()}-${Math.floor(Math.random() * 10000)}`;
+
   const post = {
     id,
     title,

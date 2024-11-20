@@ -95,7 +95,10 @@ const RegistrationScreen: React.FC<HomeScreenProps> = () => {
             </Input>
           </View>
           <View style={[styles.innerContainer, styles.buttonsContainer]}>
-            <ButtonPrimary isActive={true} onPress={onRegisterHandler}>
+            <ButtonPrimary
+              isActive={query.email !== "" && query.password !== ""}
+              onPress={onRegisterHandler}
+            >
               <Text style={(styles.baseButtonText, styles.primaryButton)}>
                 Зареєстуватися
               </Text>

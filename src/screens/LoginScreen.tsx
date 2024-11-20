@@ -97,7 +97,12 @@ const LoginScreen: React.FC<LoginScreenProps> = () => {
             </Input>
           </View>
           <View style={[styles.innerContainer, styles.buttonsContainer]}>
-            <ButtonPrimary onPress={onLoginHandler} isActive={true}>
+            <ButtonPrimary
+              onPress={onLoginHandler}
+              isActive={
+                query.email.trim() !== "" && query.password.trim() !== ""
+              }
+            >
               <Text style={(styles.baseButtonText, styles.primaryButton)}>
                 Увійти
               </Text>

@@ -103,9 +103,7 @@ const LoginScreen: React.FC<LoginScreenProps> = () => {
                 query.email.trim() !== "" && query.password.trim() !== ""
               }
             >
-              <Text style={(styles.baseButtonText, styles.primaryButton)}>
-                Увійти
-              </Text>
+              <Text style={styles.baseButtonText}>Увійти</Text>
             </ButtonPrimary>
             <View style={styles.registerContainer}>
               <Text style={[styles.baseButtonText, styles.secondaryButton]}>
@@ -175,10 +173,7 @@ const styles = StyleSheet.create({
   secondaryButton: {
     color: colors.blue,
   },
-  primaryButton: {
-    color: colors.white,
-    textAlign: "center",
-  },
+
   showPasswordButton: {
     flexDirection: "row",
     justifyContent: "space-between",

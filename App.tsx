@@ -11,6 +11,7 @@ import { PersistGate } from "redux-persist/integration/react";
 import { authStateChanged } from "./src/utils/auth";
 import { colors } from "./src/styles/global";
 import { View } from "react-native";
+import BottomFormScreen from "./src/screens/Test";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -43,6 +44,7 @@ const App = () => {
       <PersistGate persistor={store.persistor}>
         <GestureHandlerRootView style={{ flex: 1 }}>
           <AuthListener />
+          {/* <BottomFormScreen /> */}
         </GestureHandlerRootView>
       </PersistGate>
     </Provider>

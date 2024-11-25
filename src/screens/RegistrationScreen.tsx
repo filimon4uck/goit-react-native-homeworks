@@ -20,7 +20,6 @@ import { register } from "../utils/auth";
 import ImageProfile from "../components/ImageProfile";
 import { StackScreenProps } from "@react-navigation/stack";
 import { stackParamList } from "../navigation/StackNavigator";
-import { selectUserInfo } from "../store/authSlice/selectors";
 import { useDispatch } from "react-redux";
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("screen");
@@ -99,9 +98,7 @@ const RegistrationScreen: React.FC<HomeScreenProps> = () => {
               isActive={query.email !== "" && query.password !== ""}
               onPress={onRegisterHandler}
             >
-              <Text style={(styles.baseButtonText, styles.primaryButton)}>
-                Зареєстуватися
-              </Text>
+              <Text style={styles.baseButtonText}>Зареєстуватися</Text>
             </ButtonPrimary>
             <View style={styles.registerContainer}>
               <Text style={[styles.baseButtonText, styles.secondaryButton]}>
@@ -169,10 +166,7 @@ const styles = StyleSheet.create({
   secondaryButton: {
     color: colors.blue,
   },
-  primaryButton: {
-    color: colors.white,
-    textAlign: "center",
-  },
+
   showPasswordButton: {
     flexDirection: "row",
     justifyContent: "space-between",

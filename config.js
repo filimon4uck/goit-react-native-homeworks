@@ -5,11 +5,11 @@ import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyC26gkxY8efgfjtSl8RVQcKegs8aXa_V3o",
+  apiKey: "",
   authDomain: "react-native-app-ab3eb.firebaseapp.com",
-  databaseURL: "<https://react-native-app-ab3eb.firebaseio.com>",
+  databaseURL: "",
   projectId: "react-native-app-ab3eb",
-  storageBucket: "gs://react-native-app-ab3eb.firebasestorage.app",
+  storageBucket: "",
 };
 
 const app = initializeApp(firebaseConfig);
